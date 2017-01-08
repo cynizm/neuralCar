@@ -15,7 +15,7 @@ public class HUD extends Obj {
 
     private Font font = new Font("Arial", Font.PLAIN, 30);
 
-    private String creditText = "Crated by Krystian Jaworek";
+    private String creditText = "Created by Krystian Jaworek";
     private String startText = "PUSH SPACE TO START";
     private String gameOverText = "GAME OVER";
 

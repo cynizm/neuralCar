@@ -39,10 +39,10 @@ public class Car extends Obj {
             vx =0;
             vy =0;
         }
-        if (Keyboard.keyDown[KeyEvent.VK_LEFT]) {
+        if (Keyboard.keyDown[KeyEvent.VK_LEFT]&& accelerating) {
             angle -= 0.1;
         }
-        else if (Keyboard.keyDown[KeyEvent.VK_RIGHT]) {
+        else if (Keyboard.keyDown[KeyEvent.VK_RIGHT] && accelerating) {
             angle += 0.1;
         }
 
