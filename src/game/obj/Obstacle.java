@@ -38,7 +38,7 @@ public class Obstacle extends Obj {
     }
 
     private void generateRandomShape() {
-        Polygon randomAsteroidShape = new Polygon();
+        Polygon randomObstacleShape = new Polygon();
         int f = 5 + (int) (5 * Math.random());
         double da = (2 * Math.PI) / f;
         double a = (2 * Math.PI) * Math.random();
@@ -46,10 +46,10 @@ public class Obstacle extends Obj {
             double ad = halfSize + halfSize * Math.random();
             double ax = ad * Math.cos(a);
             double ay = ad * Math.sin(a);
-            randomAsteroidShape.addPoint((int) ax, (int) ay);
+            randomObstacleShape.addPoint((int) ax, (int) ay);
             a += da;
         }
-        shape = randomAsteroidShape;
+        shape = randomObstacleShape;
     }
 
     @Override
