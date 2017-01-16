@@ -29,12 +29,12 @@ public class HUD extends Obj {
     }
 
     private void createShipShape() {
-        Polygon shipShape = new Polygon();
-        shipShape.addPoint(-5, -10);
-        shipShape.addPoint(5, -10);
-        shipShape.addPoint(5, 10);
-        shipShape.addPoint(-5, 10);
-        shape = shipShape;
+//        Polygon shipShape = new Polygon();
+//        shipShape.addPoint(-5, -10);
+//        shipShape.addPoint(5, -10);
+//        shipShape.addPoint(5, 10);
+//        shipShape.addPoint(-5, 10);
+//        shape = shipShape;
     }
 
     @Override

@@ -6,37 +6,32 @@ import game.Obj;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
- * Created by TeTorro on 08.01.2017.
+ * Created by TeTorro on 15.01.2017.
  */
-public class Car extends Obj {
+public class Sensor extends Obj {
 
     public double vx, vy;
     public boolean accelerating;
-   // private List<Sensor> sensors;
+    public Color color;
+    private int id;
 
-    public Car(CarGame game) {
+    public Sensor(CarGame game, int x, int y, int id) {
         super(game);
-        setShape();
-        //setSensors()
+        setShape(x, y);
         visible = false;
-        //sensors = new ArrayList<>();
+        this.id = id;
     }
 
-    private void setSensors() {
-        List<Sensor>carSensors = new ArrayList<>();
-        //carSensors.add();
-    }
-
-    private void setShape() {
+    public void setShape(int x, int y) {
         Polygon carShape = new Polygon();
-        carShape.addPoint(-10, -5);
-        carShape.addPoint(10, -5);
-        carShape.addPoint(10, 5);
-        carShape.addPoint(-10, 5);
+
+        carShape.addPoint(2+x, 2+y);
+        carShape.addPoint(-2+x, 2+y);
+        carShape.addPoint(-2+x, -2+y);
+        carShape.addPoint(2+x, -2+y);
+
         shape = carShape;
     }
 
@@ -64,13 +59,14 @@ public class Car extends Obj {
         if(x<10 || x>game.getWidth()-30 || y<10 || y>game.getHeight()-30){
             game.hit();
         }
-            visible = true;
-            Obstacle hittedObstacle = (Obstacle) game.checkCollision(this, Obstacle.class);
-            if (hittedObstacle != null) {
-                game.hit();
-                visible=false;
-                return;
-            }
+        visible = true;
+        Obstacle hittedObstacle = (Obstacle) game.checkCollision(this, Obstacle.class);
+        if (hittedObstacle != null) {
+            game.hit();
+            System.out.println("colision");
+            visible=false;
+            return;
+        }
     }
 
     @Override
@@ -79,7 +75,7 @@ public class Car extends Obj {
             x = game.getWidth() / 2;
             y = game.getHeight() / 2;
             vx = vy = 0;
-            angle=0;
+            angle = 0;
         }
         else if (newState == CarGame.State.HITTED) {
             visible = false;
@@ -88,5 +84,4 @@ public class Car extends Obj {
             visible = false;
         }
     }
-
 }

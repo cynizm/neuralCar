@@ -1,9 +1,6 @@
 package game;
 
-import game.obj.Car;
-import game.obj.HUD;
-import game.obj.Initializer;
-import game.obj.Obstacle;
+import game.obj.*;
 
 import java.awt.*;
 import java.awt.geom.Area;
@@ -23,6 +20,7 @@ public class CarGame {
     private List<Obj> objsRemove = new ArrayList<>();
 
     private Car car = new Car(this);
+    private List<Sensor> sensor = new ArrayList<>();
 
     public enum State { INITIALIZING, TITLE, PLAYING, HITTED, GAME_OVER }
     private State state = State.INITIALIZING;
@@ -46,6 +44,16 @@ public class CarGame {
         return state;
     }
 
+    private void newSensors(){
+        sensor.add(new Sensor(this, 10  , 50, 1));
+        sensor.add(new Sensor(this, 48  , 40, 2));
+        sensor.add(new Sensor(this, 60, 0, 3));
+        sensor.add(new Sensor(this, 48,  -40, 4));
+        sensor.add(new Sensor(this, 10  , -50, 5));
+
+
+    }
+
     public void setState(State state) {
         if (this.state != state) {
             this.state = state;
@@ -63,11 +71,14 @@ public class CarGame {
         add(new Initializer(this));
         add(new HUD(this));
         add(car = new Car(this));
+        newSensors();
+        sensor.stream().forEach(s -> add(s));
+        //add(sensor = new Sensor(this));
         createObstacles();
     }
 
     public void createObstacles() {
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 10; i++) {
             createOneObstacle();
         }
     }
@@ -92,7 +103,7 @@ public class CarGame {
             x = (int) (SCREEN_WIDTH * Math.random());
             y = SCREEN_HEIGHT;
         }
-        Obstacle obstacle = new Obstacle(this, x, y, 3);
+        Obstacle obstacle = new Obstacle(this, x, y, 1);
         add(obstacle);
     }
 
