@@ -46,9 +46,11 @@ public class Sensor extends Obj {
         }
         if (Keyboard.keyDown[KeyEvent.VK_LEFT]&& accelerating) {
             angle -= 0.1;
+            angle = angle % 360;
         }
         else if (Keyboard.keyDown[KeyEvent.VK_RIGHT] && accelerating) {
             angle += 0.1;
+            angle = angle % 360;
         }
 
         vx = vx > 2 ? 2 : vx;
@@ -62,7 +64,7 @@ public class Sensor extends Obj {
         visible = true;
         Obstacle hittedObstacle = (Obstacle) game.checkCollision(this, Obstacle.class);
         if (hittedObstacle != null) {
-            game.hit();
+            //game.hit();
             System.out.println("colision");
             visible=false;
             return;

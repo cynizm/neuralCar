@@ -3,6 +3,7 @@ package game;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by TeTorro on 16.01.2017.
@@ -14,6 +15,27 @@ public class NLayer {
     private int totalNeurons;
     private int totalInputs;
     private List<Neuron> neurons;
+    private int numInputs;
+    private List<Double> weights;
+
+    public void populate(int numOfInputs) {
+        this.numInputs = numOfInputs;
+        for (int i = 0; i < numOfInputs; i++)
+        {
+            weights.add(RandomClamped());
+        }
+    }
+
+    public void initialise(List<Double> weightsIn, int numOfInputs)
+    {
+        // The number of inputs should not be equal or exceed the weights.
+        // If so, something is not right in the exported NN file or you've
+        // just done something odd to fuck this up.
+        //assert(numOfInputs < weightsIn.size());
+
+        this.numInputs = numOfInputs;
+        weights = weightsIn;
+    }
 
 
     public void Evaluate(List<Double> input, List<Double>output) {
@@ -31,6 +53,15 @@ public class NLayer {
             inputIndex = 0;
         }
     }
+
+    public void LoadLayer(List<Neuron> in)
+    {
+        totalNeurons = in.size();
+        neurons = in;
+    }
+
+
+
     public void PopulateLayer(int numOfNeurons, int numOfInputs)
     {
         totalInputs = numOfInputs;
@@ -44,6 +75,8 @@ public class NLayer {
             neurons.get(i).Populate(numOfInputs);
         }
     }
+
+
 
     public void setWeights(List<Double> weights, int numOfNeurons, int numOfInputs) {
         int index = 0;
@@ -96,5 +129,17 @@ public class NLayer {
         double ap = (-a)/p;
 
         return (1 / (1 + Math.exp(ap)));
+    }
+
+    private double RandomFloat()
+    {
+        Random r = new Random();
+
+        return r.nextDouble()/*0 to 32767*/ / Double.MAX_VALUE/*32767*/ + 1.0d;
+    }
+
+    private double RandomClamped()
+    {
+        return RandomFloat() - RandomFloat();
     }
 }

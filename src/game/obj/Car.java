@@ -51,9 +51,11 @@ public class Car extends Obj {
         }
         if (Keyboard.keyDown[KeyEvent.VK_LEFT]&& accelerating) {
             angle -= 0.1;
+            angle = angle % 360;
         }
         else if (Keyboard.keyDown[KeyEvent.VK_RIGHT] && accelerating) {
             angle += 0.1;
+            angle = angle % 360;
         }
 
         vx = vx > 2 ? 2 : vx;
@@ -67,7 +69,7 @@ public class Car extends Obj {
             visible = true;
             Obstacle hittedObstacle = (Obstacle) game.checkCollision(this, Obstacle.class);
             if (hittedObstacle != null) {
-                game.hit();
+                //game.hit();
                 visible=false;
                 return;
             }
