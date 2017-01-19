@@ -9,7 +9,7 @@ import java.awt.geom.AffineTransform;
 /**
  * Created by TeTorro on 08.01.2017.
  */
-public class Obj {
+public abstract class Obj {
 
     public CarGame game;
     public double x, y;

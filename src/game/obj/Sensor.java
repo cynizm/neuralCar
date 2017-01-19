@@ -1,62 +1,41 @@
 package game.obj;
 
 import game.CarGame;
-import game.Keyboard;
-import game.Obj;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
 
 /**
  * Created by TeTorro on 15.01.2017.
  */
-public class Sensor extends Obj {
+public class Sensor extends MovingObject {
 
     public double vx, vy;
     public boolean accelerating;
     public Color color;
     private int id;
+    double lengh;
+    private CarGame carGame;
 
-    public Sensor(CarGame game, int x, int y, int id) {
+    public Sensor(CarGame game, int x, int y, int x2, int y2, int id) {
         super(game);
-        setShape(x, y);
+        setShape(x, y, x2, y2);
         visible = false;
         this.id = id;
+        this.carGame = game;
     }
 
-    public void setShape(int x, int y) {
-        Polygon carShape = new Polygon();
+    public void setShape(int x, int y, int x2, int y2) {
+        Polygon sensor = new Polygon();
 
-        carShape.addPoint(2+x, 2+y);
-        carShape.addPoint(-2+x, 2+y);
-        carShape.addPoint(-2+x, -2+y);
-        carShape.addPoint(2+x, -2+y);
+        sensor.addPoint(x,y);
+        sensor.addPoint(x2, y2);
 
-        shape = carShape;
+        shape = sensor;
     }
 
     @Override
     public void updatePlaying() {
-        if (accelerating = Keyboard.keyDown[KeyEvent.VK_UP]) {
-            vx = 4 * Math.cos(angle);
-            vy = 4 * Math.sin(angle);
-        } else {
-            vx =0;
-            vy =0;
-        }
-        if (Keyboard.keyDown[KeyEvent.VK_LEFT]&& accelerating) {
-            angle -= 0.1;
-            angle = angle % 360;
-        }
-        else if (Keyboard.keyDown[KeyEvent.VK_RIGHT] && accelerating) {
-            angle += 0.1;
-            angle = angle % 360;
-        }
-
-        vx = vx > 2 ? 2 : vx;
-        vy = vy > 2 ? 2 : vy;
-        x += vx;
-        y += vy;
+        moveObject();
 
         if(x<10 || x>game.getWidth()-30 || y<10 || y>game.getHeight()-30){
             game.hit();
@@ -77,7 +56,7 @@ public class Sensor extends Obj {
             x = game.getWidth() / 2;
             y = game.getHeight() / 2;
             vx = vy = 0;
-            angle = 0;
+            angle = carGame.getCar().angle;
         }
         else if (newState == CarGame.State.HITTED) {
             visible = false;

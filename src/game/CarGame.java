@@ -45,11 +45,11 @@ public class CarGame {
     }
 
     private void newSensors(){
-        sensor.add(new Sensor(this, 10  , 50, 1));
-        sensor.add(new Sensor(this, 48  , 40, 2));
-        sensor.add(new Sensor(this, 60, 0, 3));
-        sensor.add(new Sensor(this, 48,  -40, 4));
-        sensor.add(new Sensor(this, 10  , -50, 5));
+        sensor.add(new Sensor(this, (int) car.x+10, (int) car.y,(int) car.x+500, (int) car.y, 1));
+//        sensor.add(new Sensor(this, 48  , 40, 2));
+//        sensor.add(new Sensor(this, 60, 0, 3));
+//        sensor.add(new Sensor(this, 48,  -40, 4));
+//        sensor.add(new Sensor(this, 10  , -50, 5));
 
 
     }
@@ -148,11 +148,36 @@ public class CarGame {
             a1.transform(o1.getTranform());
             a2.transform(o2.getTranform());
             a1.intersect(a2);
+
+            if(o1 instanceof Sensor) {
+                Area a = new Area(o1.shape);
+                Area b = new Area(o2.shape);
+                b.intersect(a);
+                System.out.println("bounds :"+ b.getBounds()+ " next: Bouds2D: "+b.getBounds2D());
+                if (!b.isEmpty()) {
+                    System.out.println("bounds :"+ b.getBounds()+ " next: Bouds2D: "+b.getBounds2D());
+                }
+            }
             if (!a1.isEmpty()) {
+
                 return o2;
             }
         }
 
+        return null;
+    }
+
+    public Obj getIntersection (Obj o1, Class collidedObjType){
+
+
+//        if(o1 instanceof Sensor && collidedObjType instanceof Obstacle)
+//        Area a = new Area(o1);
+//        Area b = new Area(collidedObjType);
+//        b.intersect(a);
+//        if (!b.isEmpty()) {
+//            //Shapes have non-empty intersection, so do you actions.
+//            //In case of need, actual intersection is in Area b. (its destructive operation)
+//        }
         return null;
     }
 
@@ -173,6 +198,10 @@ public class CarGame {
         removeAllObstacles();
         createObstacles();
         setState(State.TITLE);
+    }
+
+    public Car getCar(){
+        return car;
     }
 
 }

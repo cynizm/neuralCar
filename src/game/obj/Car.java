@@ -1,21 +1,17 @@
 package game.obj;
 
 import game.CarGame;
-import game.Keyboard;
-import game.Obj;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by TeTorro on 08.01.2017.
  */
-public class Car extends Obj {
+public class Car extends MovingObject {
 
-    public double vx, vy;
-    public boolean accelerating;
+
    // private List<Sensor> sensors;
 
     public Car(CarGame game) {
@@ -40,29 +36,11 @@ public class Car extends Obj {
         shape = carShape;
     }
 
+
     @Override
     public void updatePlaying() {
-        if (accelerating = Keyboard.keyDown[KeyEvent.VK_UP]) {
-            vx = 4 * Math.cos(angle);
-            vy = 4 * Math.sin(angle);
-        } else {
-            vx =0;
-            vy =0;
-        }
-        if (Keyboard.keyDown[KeyEvent.VK_LEFT]&& accelerating) {
-            angle -= 0.1;
-            angle = angle % 360;
-        }
-        else if (Keyboard.keyDown[KeyEvent.VK_RIGHT] && accelerating) {
-            angle += 0.1;
-            angle = angle % 360;
-        }
-
-        vx = vx > 2 ? 2 : vx;
-        vy = vy > 2 ? 2 : vy;
-        x += vx;
-        y += vy;
-
+        moveObject();
+        angle=game.getCar().angle;
         if(x<10 || x>game.getWidth()-30 || y<10 || y>game.getHeight()-30){
             game.hit();
         }
@@ -70,7 +48,7 @@ public class Car extends Obj {
             Obstacle hittedObstacle = (Obstacle) game.checkCollision(this, Obstacle.class);
             if (hittedObstacle != null) {
                 //game.hit();
-                visible=false;
+                //visible=false;
                 return;
             }
     }
