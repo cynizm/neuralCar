@@ -11,12 +11,10 @@ import java.util.List;
  */
 public class Car extends MovingObject {
 
-
-   // private List<Sensor> sensors;
-
     public Car(CarGame game) {
         super(game);
         setShape();
+        this.game = game;
         //setSensors()
         visible = false;
         //sensors = new ArrayList<>();
@@ -29,10 +27,10 @@ public class Car extends MovingObject {
 
     private void setShape() {
         Polygon carShape = new Polygon();
-        carShape.addPoint(-10, -5);
-        carShape.addPoint(10, -5);
-        carShape.addPoint(10, 5);
-        carShape.addPoint(-10, 5);
+        carShape.addPoint(-20, -10);
+        carShape.addPoint(20, -10);
+        carShape.addPoint(20, 10);
+        carShape.addPoint(-20, 10);
         shape = carShape;
     }
 

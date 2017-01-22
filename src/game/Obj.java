@@ -27,7 +27,7 @@ public abstract class Obj {
     public AffineTransform getTranform() {
         transform.setToIdentity();
         transform.translate(x, y);
-        transform.rotate(angle);
+        transform.rotate(Math.toRadians(angle));
         return transform;
     }
 
@@ -48,7 +48,7 @@ public abstract class Obj {
         AffineTransform previousTransform = g.getTransform();
         g.setColor(color);
         g.translate(x, y);
-        g.rotate(angle);
+        g.rotate(Math.toRadians(angle));
         g.draw(shape);
         g.setTransform(previousTransform);
     }

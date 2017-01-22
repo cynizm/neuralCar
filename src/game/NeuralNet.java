@@ -16,6 +16,14 @@ public class NeuralNet {
     private NLayer outputLayer;
     private List<Double> outputs;
 
+    public NeuralNet() {
+        this.inputs = new ArrayList<>();
+        this.hiddenLayers = new ArrayList<>();
+        this.outputs = new ArrayList<>();
+        this.outputLayer = new NLayer();
+        this.inputLayer = new NLayer();
+    }
+
 
     public void update() {
         outputs.clear();

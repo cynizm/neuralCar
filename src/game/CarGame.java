@@ -13,7 +13,7 @@ import java.util.List;
 public class CarGame {
 
     public static final String TITLE = "neural Car";
-    public static final int SCREEN_WIDTH = 600, SCREEN_HEIGHT = 600;
+    public static final int SCREEN_WIDTH = 800, SCREEN_HEIGHT = 600;
 
     private List<Obj> objs = new ArrayList<>();
     private List<Obj> objsAdd = new ArrayList<>();
@@ -25,11 +25,39 @@ public class CarGame {
     public enum State { INITIALIZING, TITLE, PLAYING, HITTED, GAME_OVER }
     private State state = State.INITIALIZING;
 
+    static float CHECK_POINT_BONUS = 15.0f;
+    static float DEFAULT_ROTATION = 90.0f;
+    static int MAX_GENOME_POPULATION = 15;
+    static int HIDDEN_LAYER_NEURONS = 8;
+    static int MAX_POPULATION = 15;
+    static float MUTATION_RATE = 0.15f;
+
+
+    private Agent testAgent;
+    private List<Agent> agents;
+    private float currentAgentFitness;
+    private float bestFitness;
+    private float currentTimer;
+    private List<Boolean> decision;
+
+    private NeuralNet neuralNet;
+
+    GeneticAlgorithm geneticAlgorithm;
 
 
 
     public CarGame() {
         init();
+        this.testAgent = new Agent();
+        this.agents = agents;
+        this.currentAgentFitness = 0.0f;
+        this.bestFitness = 0.0f;
+        this.currentTimer = 0.0f;
+        this.neuralNet = new NeuralNet();
+        int totalweights = 5 * HIDDEN_LAYER_NEURONS + HIDDEN_LAYER_NEURONS * 2 + HIDDEN_LAYER_NEURONS + 2;
+        this.geneticAlgorithm = new GeneticAlgorithm();
+        this.testAgent.Attach(neuralNet);
+        this.decision= new ArrayList<>();
     }
 
     public int getWidth() {
@@ -45,7 +73,7 @@ public class CarGame {
     }
 
     private void newSensors(){
-        sensor.add(new Sensor(this, (int) car.x+10, (int) car.y,(int) car.x+500, (int) car.y, 1));
+        sensor.add(new Sensor(this, (int) car.x+20, (int) car.y,(int) car.x+50, (int) car.y, 1));
 //        sensor.add(new Sensor(this, 48  , 40, 2));
 //        sensor.add(new Sensor(this, 60, 0, 3));
 //        sensor.add(new Sensor(this, 48,  -40, 4));
@@ -78,7 +106,7 @@ public class CarGame {
     }
 
     public void createObstacles() {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 30; i++) {
             createOneObstacle();
         }
     }
@@ -103,7 +131,7 @@ public class CarGame {
             x = (int) (SCREEN_WIDTH * Math.random());
             y = SCREEN_HEIGHT;
         }
-        Obstacle obstacle = new Obstacle(this, x, y, 1);
+        Obstacle obstacle = new Obstacle(this, x, y, 3);
         add(obstacle);
     }
 
@@ -113,6 +141,8 @@ public class CarGame {
                 obj.destroyed = true;
             }
         }
+
+
     }
 
     public void update() {
@@ -122,6 +152,17 @@ public class CarGame {
                 objsRemove.add(obj);
             }
         }
+        if (testAgent.HasFailed())
+        {
+            if (geneticAlgorithm.getCurrentGenomeIndex() == MAX_GENOME_POPULATION - 1)
+            {
+                EvolveGenomes();
+                return;
+            }
+            nextTestSubject();
+        }
+        // Update the agent.
+        decision = testAgent.Update(sensor);
         objs.addAll(objsAdd);
         objsAdd.clear();
         objs.removeAll(objsRemove);
@@ -153,10 +194,12 @@ public class CarGame {
                 Area a = new Area(o1.shape);
                 Area b = new Area(o2.shape);
                 b.intersect(a);
-                System.out.println("bounds :"+ b.getBounds()+ " next: Bouds2D: "+b.getBounds2D());
+                //System.out.println("bounds :"+ b.getBounds()+ " next: Bouds2D: "+b.getBounds2D());
                 if (!b.isEmpty()) {
-                    System.out.println("bounds :"+ b.getBounds()+ " next: Bouds2D: "+b.getBounds2D());
+                    ((Sensor) o1).setColision(true);
+                    //System.out.println("bounds :"+ b.getBounds()+ " next: Bouds2D: "+b.getBounds2D());
                 }
+
             }
             if (!a1.isEmpty()) {
 
@@ -183,6 +226,42 @@ public class CarGame {
 
     // ---
 
+    public void nextTestSubject(){
+        geneticAlgorithm.setGenomeFitness(currentAgentFitness, geneticAlgorithm.getCurrentGenomeIndex());
+        currentAgentFitness = 0.0f;
+        Genome genome = geneticAlgorithm.getNextGenome();
+        neuralNet.formGenom(genome, 5 , HIDDEN_LAYER_NEURONS, 2);
+        testAgent.Attach(neuralNet);
+        testAgent.ClearFailure();
+    }
+
+    public void BreedNewPopulation()
+    {
+        geneticAlgorithm.ClearPopulation();
+        int totalWeights = 5 * HIDDEN_LAYER_NEURONS + HIDDEN_LAYER_NEURONS * 2 + HIDDEN_LAYER_NEURONS + 2;
+        geneticAlgorithm.generateNewPopulation(MAX_GENOME_POPULATION, totalWeights);
+    }
+
+    public void EvolveGenomes()
+    {
+        geneticAlgorithm.BreedPopulation();
+        nextTestSubject();
+    }
+
+    public int GetCurrentMemberOfPopulation()
+    {
+        return geneticAlgorithm.getCurrentGenomeIndex();
+    }
+
+    public void forceToNextAgent(){
+        if (geneticAlgorithm.getCurrentGenomeIndex() == MAX_GENOME_POPULATION - 1)
+        {
+            EvolveGenomes();
+            return;
+        }
+        nextTestSubject();
+    }
+
     public void start() {
         removeAllObstacles();
         createObstacles();
@@ -202,6 +281,10 @@ public class CarGame {
 
     public Car getCar(){
         return car;
+    }
+
+    public List<Boolean> getDecision() {
+        return decision;
     }
 
 }

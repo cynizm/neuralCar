@@ -16,13 +16,13 @@ public class Obstacle extends Obj {
     public int halfSize;
 
     // size = 1 small, 2 medium, 3 large
-    public Obstacle(CarGame game, double x, double y, int size) {
+    public Obstacle(CarGame game, int x, int y, int size) {
         super(game);
         this.x = x;
         this.y = y;
         this.size = size;
         this.halfSize = size * 10;
-        angle = (2 * Math.PI) * Math.random();
+        angle = (int)((2 * Math.PI) * Math.random());
         double v = 0.5 + 1 * Math.random();
         vx = (4 - size) * Math.cos(angle) * v;
         vy = (4 - size) * Math.sin(angle) * v;

@@ -263,7 +263,7 @@ public class GeneticAlgorithm {
         }
     }
 
-    public void SetGenomeFitness(float fitness, int index)
+    public void setGenomeFitness(float fitness, int index)
     {
         if (index >= population.size())
             return;
@@ -292,6 +292,10 @@ public class GeneticAlgorithm {
 
     public int getGenomeID() {
         return genomeID;
+    }
+
+    public int getCurrentGenomeIndex() {
+        return currentGenome;
     }
 
     private double RandomFloat()
